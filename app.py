@@ -1,66 +1,118 @@
 import streamlit as st
 
-# Título del juego
-st.title("🔤 Sopa de Letras: Apuestas Deportivas")
+st.title("Cuestionario Diagnóstico - Apuestas Deportivas")
 
-# Palabras a buscar
-palabras_clave = {"CUOTA", "RIESGO", "APUESTA", "PARLAY", "GANANCIA", "JUGADOR", "BOOKMAKER", "BANCA"}
+preguntas = [
+    {
+        "pregunta": "¿Qué es una apuesta deportiva?",
+        "opciones": ["Una predicción sin dinero", "Un juego de azar con dinero", "Una inversión garantizada", "Una actividad ilegal"],
+        "respuesta": "Un juego de azar con dinero"
+    },
+    {
+        "pregunta": "¿Qué significa 'cuota' en apuestas?",
+        "opciones": ["El dinero apostado", "La probabilidad de ganar", "El pago potencial", "El tipo de apuesta"],
+        "respuesta": "El pago potencial"
+    },
+    {
+        "pregunta": "¿Qué representa el 'stake'?",
+        "opciones": ["El tipo de apuesta", "La cantidad apostada", "La probabilidad de ganar", "El pago potencial"],
+        "respuesta": "La cantidad apostada"
+    },
+    {
+        "pregunta": "¿Qué tipo de apuesta es '1X2'?",
+        "opciones": ["Ganar, empatar o perder", "Sólo ganar o perder", "Empate sí o no", "Dobles oportunidades"],
+        "respuesta": "Ganar, empatar o perder"
+    },
+    {
+        "pregunta": "¿Qué es una cuota decimal?",
+        "opciones": ["Un formato europeo", "Un formato americano", "Un tipo de apuesta", "Un valor fijo"],
+        "respuesta": "Un formato europeo"
+    },
+    {
+        "pregunta": "¿Qué es una cuota fraccionaria?",
+        "opciones": ["Un formato europeo", "Un formato británico", "Un tipo de apuesta", "Un pago fijo"],
+        "respuesta": "Un formato británico"
+    },
+    {
+        "pregunta": "¿Qué indica una cuota americana?",
+        "opciones": ["La probabilidad de empate", "El pago potencial", "El equipo favorito o no", "El tipo de deporte"],
+        "respuesta": "El equipo favorito o no"
+    },
+    {
+        "pregunta": "¿Qué es el valor esperado (EV)?",
+        "opciones": ["La ganancia segura", "La probabilidad media", "El beneficio promedio a largo plazo", "La apuesta mínima"],
+        "respuesta": "El beneficio promedio a largo plazo"
+    },
+    {
+        "pregunta": "¿Qué es bankroll?",
+        "opciones": ["El total de apuestas hechas", "El dinero disponible para apostar", "El tipo de apuesta", "La cuota mínima"],
+        "respuesta": "El dinero disponible para apostar"
+    },
+    {
+        "pregunta": "¿Qué significa 'doble oportunidad'?",
+        "opciones": ["Apostar en dos eventos diferentes", "Apostar a dos resultados en el mismo partido", "Apostar doble cantidad", "Apostar al ganador del torneo"],
+        "respuesta": "Apostar a dos resultados en el mismo partido"
+    },
+    {
+        "pregunta": "¿Qué es una apuesta 'Draw No Bet' (DNB)?",
+        "opciones": ["Apuesta que gana con empate", "Apuesta que anula si hay empate", "Apuesta a ganador claro", "Apuesta a empate"],
+        "respuesta": "Apuesta que anula si hay empate"
+    },
+    {
+        "pregunta": "¿Qué significa el término 'mercado' en apuestas?",
+        "opciones": ["Lugar físico para apostar", "Tipo de apuesta disponible", "Cantidad mínima para apostar", "Cuota mínima"],
+        "respuesta": "Tipo de apuesta disponible"
+    },
+    {
+        "pregunta": "¿Por qué es importante la gestión del bankroll?",
+        "opciones": ["Para apostar sin límites", "Para evitar perder todo el dinero", "Para ganar siempre", "Para apostar en varios deportes"],
+        "respuesta": "Para evitar perder todo el dinero"
+    },
+    {
+        "pregunta": "¿Qué es 'tilt' en apuestas?",
+        "opciones": ["Una estrategia", "Un error emocional", "Una apuesta segura", "Un tipo de cuota"],
+        "respuesta": "Un error emocional"
+    },
+    {
+        "pregunta": "¿Qué significa apostar responsablemente?",
+        "opciones": ["Apostar sin control", "Conocer límites y riesgos", "Apostar solo en casa", "Apostar siempre lo máximo"],
+        "respuesta": "Conocer límites y riesgos"
+    },
+    {
+        "pregunta": "¿Qué es una apuesta combinada?",
+        "opciones": ["Una apuesta múltiple con varios eventos", "Una apuesta a ganador y empate", "Una apuesta a doble oportunidad", "Una apuesta sin cuota"],
+        "respuesta": "Una apuesta múltiple con varios eventos"
+    },
+    {
+        "pregunta": "¿Qué es la cuota implícita?",
+        "opciones": ["La probabilidad calculada a partir de la cuota", "La cuota más baja", "La apuesta mínima", "El pago seguro"],
+        "respuesta": "La probabilidad calculada a partir de la cuota"
+    },
+    {
+        "pregunta": "¿Qué es un 'mercado de apuestas'?",
+        "opciones": ["El lugar donde se hacen las apuestas", "El conjunto de opciones disponibles para apostar", "La cantidad apostada", "El pago recibido"],
+        "respuesta": "El conjunto de opciones disponibles para apostar"
+    },
+    {
+        "pregunta": "¿Qué es la cuota más alta?",
+        "opciones": ["La que paga menos", "La que paga más", "La cuota mínima", "La cuota media"],
+        "respuesta": "La que paga más"
+    },
+    {
+        "pregunta": "¿Por qué es importante comparar cuotas?",
+        "opciones": ["Para apostar en menos partidos", "Para maximizar ganancias potenciales", "Para apostar menos dinero", "Para apostar sin riesgo"],
+        "respuesta": "Para maximizar ganancias potenciales"
+    }
+]
 
-# Mostrar instrucciones
-st.info("Encuentra las palabras ocultas relacionadas con las apuestas deportivas. Escríbelas en el campo de abajo. ¡Tienes 8 intentos!")
+puntaje = 0
 
-# Sopa de letras (manual para mostrar visualmente)
-sopa = """
-R I E S G O P A R L A Y
-U B O O K M A K E R G N
-A P U E S T A N B A N C
-S R T J U G A D O R M I
-C Q W E R T Y U I O P A
-"""
+for i, pregunta in enumerate(preguntas, 1):
+    st.write(f"**Pregunta {i}:** {pregunta['pregunta']}")
+    opciones = pregunta["opciones"]
+    respuesta_correcta = pregunta["respuesta"]
+    seleccion = st.radio("", opciones, key=f"pregunta_{i}")
+    if seleccion == respuesta_correcta:
+        puntaje += 1
 
-st.text_area("🔍 Sopa de letras:", sopa, height=150, disabled=True)
-
-# Inicializar variables
-if "encontradas" not in st.session_state:
-    st.session_state.encontradas = set()
-if "intentos" not in st.session_state:
-    st.session_state.intentos = 0
-
-# Entrada del usuario
-palabra = st.text_input("✍️ Escribe una palabra que encontraste:")
-
-if st.button("Validar palabra"):
-    palabra_mayus = palabra.strip().upper()
-    st.session_state.intentos += 1
-
-    if palabra_mayus in palabras_clave and palabra_mayus not in st.session_state.encontradas:
-        st.success(f"✅ ¡Correcto! Encontraste: {palabra_mayus}")
-        st.session_state.encontradas.add(palabra_mayus)
-    elif palabra_mayus in st.session_state.encontradas:
-        st.warning("⚠️ Esa palabra ya la encontraste.")
-    else:
-        st.error("❌ Esa palabra no está en la lista.")
-
-# Mostrar progreso
-st.markdown(f"🧠 Palabras encontradas: **{len(st.session_state.encontradas)} / {len(palabras_clave)}**")
-st.markdown(f"🕓 Intentos usados: **{st.session_state.intentos} / 8**")
-
-# Mostrar palabras ya encontradas
-if st.session_state.encontradas:
-    st.write("📌 Palabras encontradas:")
-    st.write(", ".join(sorted(st.session_state.encontradas)))
-
-# Fin del juego
-if len(st.session_state.encontradas) == len(palabras_clave):
-    st.balloons()
-    st.success("🎉 ¡Encontraste todas las palabras! ¡Buen trabajo!")
-
-if st.session_state.intentos >= 8 and len(st.session_state.encontradas) < len(palabras_clave):
-    st.warning("😢 Se acabaron los intentos.")
-
-# Botón para reiniciar
-if st.button("🔁 Reiniciar juego"):
-    for key in list(st.session_state.keys()):
-        del st.session_state[key]
-    st.rerun()
-
+st.write(f"Tu puntaje es {puntaje} de {len(preguntas)}")
