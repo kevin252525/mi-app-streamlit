@@ -1,91 +1,65 @@
 import streamlit as st
+from streamlit_extras.colored_header import colored_header
 
-# Configuración inicial
-st.set_page_config(page_title="Cuestionario Apuestas Deportivas", layout="centered")
+st.set_page_config(page_title="Cuestionario Apuestas", layout="centered")
 
-# Colores y estilos
+# TÍTULO
 st.markdown("""
-    <style>
-        .main { background-color: #f0f2f6; }
-        .stButton>button {
-            background-color: #0099ff;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: none;
-            font-weight: bold;
-        }
-        .stButton>button:hover {
-            background-color: #007acc;
-        }
-    </style>
+    <h1 style='text-align: center; color: #4B0082;'>🎲 Cuestionario Diagnóstico - Apuestas Deportivas</h1>
 """, unsafe_allow_html=True)
 
-# Título del juego
-st.title("🎲 Juego de Apuestas Deportivas")
+# DATOS DE USUARIO
+with st.form("form_usuario"):
+    colored_header("Ingresa tus datos para comenzar", description="", color_name="violet-60")
+    nombre = st.text_input("👤 Nombre")
+    edad = st.number_input("🎂 Edad", min_value=0, max_value=120, step=1)
+    empezar = st.form_submit_button("Iniciar juego")
 
-# Estado inicial
-if "intentos" not in st.session_state:
-    st.session_state.intentos = 0
-if "mejor_nota" not in st.session_state:
-    st.session_state.mejor_nota = 0
 if "jugar" not in st.session_state:
     st.session_state.jugar = False
+if "intentos" not in st.session_state:
+    st.session_state.intentos = 0
+if "mejor_puntaje" not in st.session_state:
+    st.session_state.mejor_puntaje = 0
 
-# Datos del usuario
-if not st.session_state.jugar:
-    st.subheader("👤 Ingresa tus datos para comenzar")
-    nombre = st.text_input("Nombre")
-    edad = st.number_input("Edad", min_value=0, max_value=100, step=1)
+# VERIFICAR DATOS
+if empezar:
+    if not nombre:
+        st.warning("⚠️ Debes ingresar un nombre.")
+    elif edad < 18:
+        st.error("🚫 Debes tener al menos 18 años para jugar.")
+    else:
+        st.session_state.jugar = True
+        st.session_state.intentos = 1
 
-    if st.button("Iniciar juego"):
-        if not nombre:
-            st.warning("Por favor, ingresa tu nombre.")
-        elif edad < 18:
-            st.error("🚫 Debes tener al menos 18 años para jugar.")
-        else:
-            st.session_state.jugar = True
-            st.session_state.nombre = nombre
-            st.session_state.edad = edad
-            st.experimental_rerun()
+if st.session_state.jugar and st.session_state.intentos <= 3:
 
-# Preguntas
-if st.session_state.jugar and st.session_state.intentos < 3:
     preguntas = [
-        {
-            "pregunta": "¿Qué es una apuesta deportiva?",
-            "opciones": ["Una predicción sin dinero", "Un juego de azar con dinero", "Una inversión garantizada", "Una actividad ilegal"],
-            "respuesta": "Un juego de azar con dinero"
-        },
-        {
-            "pregunta": "¿Qué significa 'cuota' en apuestas?",
-            "opciones": ["El dinero apostado", "La probabilidad de ganar", "El pago potencial", "El tipo de apuesta"],
-            "respuesta": "El pago potencial"
-        },
-        {
-            "pregunta": "¿Qué representa el 'stake'?",
-            "opciones": ["El tipo de apuesta", "La cantidad apostada", "La probabilidad de ganar", "El pago potencial"],
-            "respuesta": "La cantidad apostada"
-        },
-        {
-            "pregunta": "¿Qué tipo de apuesta es '1X2'?",
-            "opciones": ["Ganar, empatar o perder", "Sólo ganar o perder", "Empate sí o no", "Dobles oportunidades"],
-            "respuesta": "Ganar, empatar o perder"
-        }
+        # (Tu lista de 20 preguntas aquí con sus respuestas y opciones como diccionario)
     ]
 
-    st.markdown(f"#### Intento N° {st.session_state.intentos + 1}")
     puntaje = 0
+    st.subheader(f"Intento {st.session_state.intentos} de 3")
 
-    respuestas_usuario = []
-
-    for i, p in enumerate(preguntas):
-        st.write(f"**{p['pregunta']}**")
-        seleccion = st.radio("Selecciona una opción:", p["opciones"], key=f"q_{i}")
-        respuestas_usuario.append(seleccion)
-        if seleccion == p["respuesta"]:
+    for i, pregunta in enumerate(preguntas, 1):
+        st.markdown(f"**Pregunta {i}:** {pregunta['pregunta']}")
+        respuesta = st.radio("", pregunta["opciones"], key=f"pregunta_{i}_{st.session_state.intentos}")
+        if respuesta == pregunta["respuesta"]:
             puntaje += 1
 
-    if st.button("Enviar respuestas"):
-        nota = round((puntaje / len(preguntas)) * 10, 2)
-        st.success(f"✅ Obtuviste {puntaje} de {len(preguntas)} respuestas correctas. Nota: {nota}/10")
+    if st.button("Enviar respuestas", key=f"boton_enviar_{st.session_state.intentos}"):
+        st.success(f"🎉 Obtuviste {puntaje} de {len(preguntas)} puntos. Nota: {(puntaje/len(preguntas))*10:.1f}/10")
+        if puntaje > st.session_state.mejor_puntaje:
+            st.session_state.mejor_puntaje = puntaje
+
+        if st.session_state.intentos < 3:
+            if st.button("🔁 Realizar otro intento"):
+                st.session_state.intentos += 1
+                st.rerun()
+        else:
+            st.warning("😮 Ya usaste los 3 intentos.")
+            st.info(f"🏆 Tu mejor nota fue: {st.session_state.mejor_puntaje * 10 / len(preguntas):.1f}/10")
+
+elif st.session_state.intentos > 3:
+    st.warning("😮 Ya usaste los 3 intentos.")
+    st.info(f"🏆 Tu mejor nota fue: {st.session_state.mejor_puntaje * 10 / len(preguntas):.1f}/10")
