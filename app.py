@@ -93,3 +93,4 @@ if st.session_state.jugando and st.session_state.intentos >= 3:
         st.session_state.mejor_nota = 0
         st.session_state.jugando = False
         st.experimental_rerun()
+
