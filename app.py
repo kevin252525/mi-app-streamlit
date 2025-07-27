@@ -27,7 +27,7 @@ ss = st.session_state
 if "nombre" not in ss:
     ss.nombre = ""
 if "edad" not in ss:
-    ss.edad = 0
+    ss.edad = 18  # inicializamos dentro del rango [18,120]
 if "jugar" not in ss:
     ss.jugar = False
 if "intentos" not in ss:
@@ -43,17 +43,16 @@ if "mostrar_resultado" not in ss:
 if not ss.jugar and ss.intentos < 3:
     st.subheader("👤 Ingresa tus datos para comenzar")
     ss.nombre = st.text_input("Nombre", value=ss.nombre)
-    ss.edad = st.number_input("Edad", min_value=1, max_value=120, step=1, value=ss.edad)
+    # ahora el default value de edad está garantizado ≥18
+    ss.edad = st.number_input("Edad", min_value=18, max_value=120, step=1, value=ss.edad)
     if st.button("Iniciar juego"):
         if ss.nombre.strip() == "":
             st.warning("❗ Por favor ingresa tu nombre.")
-        elif ss.edad < 18:
-            st.error("🚫 Debes tener al menos 18 años para participar.")
         else:
             ss.jugar = True
             ss.mostrar_form = True
             ss.mostrar_resultado = False
-            st.experimental_rerun()
+            st.rerun()
 
 # --- Definición de preguntas ---
 preguntas = [
@@ -134,18 +133,18 @@ if ss.jugar and ss.intentos < 3 and ss.mostrar_form:
                 if respuestas[idx] == p["respuesta"]:
                     puntaje += 1
             nota = round((puntaje / len(preguntas)) * 10, 2)
-            st.session_state.intentos += 1
+            ss.intentos += 1
             if nota > ss.mejor_nota:
                 ss.mejor_nota = nota
             ss.mostrar_form = False
             ss.mostrar_resultado = True
-            st.success(f"✅ Intento {ss.intentos}: obtuviste {puntaje}/{len(preguntas)} respuestas correctas. Nota: {nota}/10")
+            st.success(f"✅ Intento {ss.intentos}: obtuviste {puntaje}/{len(preguntas)} correctas. Nota: {nota}/10")
             if ss.intentos < 3:
                 st.info("¿Quieres realizar otro intento?")
                 if st.button("🔄 Quiero realizar otro intento"):
                     ss.mostrar_form = True
                     ss.mostrar_resultado = False
-                    st.experimental_rerun()
+                    st.rerun()
 
 # --- Paso 3: Resultado final y reinicio ---
 if ss.intentos >= 3 and ss.mostrar_resultado:
@@ -154,4 +153,4 @@ if ss.intentos >= 3 and ss.mostrar_resultado:
     if st.button("🔁 Reiniciar juego completamente"):
         for k in list(st.session_state.keys()):
             del st.session_state[k]
-        st.experimental_rerun()
+        st.rerun()
