@@ -18,42 +18,39 @@ div.stButton > button:hover {
 </style>
 """, unsafe_allow_html=True)
 
-# --- Configuración de la página ---
 st.set_page_config(page_title="Cuestionario - Apuestas Deportivas", layout="centered")
 st.title("🎲 Cuestionario Diagnóstico - Apuestas Deportivas")
 
-# --- Estado de la sesión ---
 ss = st.session_state
-if "nombre" not in ss:
-    ss.nombre = ""
-if "edad" not in ss:
-    ss.edad = 18  # inicializamos dentro del rango [18,120]
-if "jugar" not in ss:
-    ss.jugar = False
-if "intentos" not in ss:
-    ss.intentos = 0
-if "mejor_nota" not in ss:
-    ss.mejor_nota = 0
-if "mostrar_form" not in ss:
-    ss.mostrar_form = False
-if "mostrar_resultado" not in ss:
-    ss.mostrar_resultado = False
+
+# --- Inicializar estado ---
+for var, default in [
+    ("nombre", ""), ("edad", 18),
+    ("jugar", False), ("intentos", 0),
+    ("mejor_nota", 0), ("mostrar_form", False),
+    ("mostrar_resultado", False)
+]:
+    if var not in ss:
+        ss[var] = default
 
 # --- Paso 1: ingreso de datos ---
 if not ss.jugar and ss.intentos < 3:
     st.subheader("👤 Ingresa tus datos para comenzar")
     ss.nombre = st.text_input("Nombre", value=ss.nombre)
-    # ahora el default value de edad está garantizado ≥18
-    ss.edad = st.number_input("Edad", min_value=18, max_value=120, step=1, value=ss.edad)
+    ss.edad = st.number_input(
+        "Edad (debes tener al menos 18 años)", 
+        min_value=1, max_value=120, step=1, value=ss.edad
+    )
     if st.button("Iniciar juego"):
         if ss.nombre.strip() == "":
             st.warning("❗ Por favor ingresa tu nombre.")
+        elif ss.edad < 18:
+            st.error("🚫 Debes tener al menos 18 años para participar.")
         else:
             ss.jugar = True
             ss.mostrar_form = True
             ss.mostrar_resultado = False
             st.rerun()
-
 # --- Definición de preguntas ---
 preguntas = [
     {"pregunta": "¿Qué es una apuesta deportiva?",
@@ -117,40 +114,38 @@ preguntas = [
      "opciones": ["Menos partidos","Maximizar ganancias","Menos dinero","Sin riesgo"],
      "respuesta": "Maximizar ganancias"}
 ]
-
-# --- Paso 2: Mostrar formulario de preguntas ---
+# --- Paso 2: formulario de preguntas ---
 if ss.jugar and ss.intentos < 3 and ss.mostrar_form:
     with st.form("form_cuestionario"):
-        puntaje = 0
+        st.subheader(f"🏆 Intento {ss.intentos+1} de 3 — Jugador: {ss.nombre}")
         respuestas = []
         for idx, p in enumerate(preguntas):
             st.markdown(f"**{idx+1}. {p['pregunta']}**")
-            r = st.radio("", p["opciones"], key=f"p{idx}")
+            r = st.radio("", p["opciones"], key=f"q{idx}")
             respuestas.append(r)
-        enviar = st.form_submit_button("Enviar respuestas")
-        if enviar:
-            for idx, p in enumerate(preguntas):
-                if respuestas[idx] == p["respuesta"]:
-                    puntaje += 1
-            nota = round((puntaje / len(preguntas)) * 10, 2)
-            ss.intentos += 1
-            if nota > ss.mejor_nota:
-                ss.mejor_nota = nota
-            ss.mostrar_form = False
-            ss.mostrar_resultado = True
-            st.success(f"✅ Intento {ss.intentos}: obtuviste {puntaje}/{len(preguntas)} correctas. Nota: {nota}/10")
-            if ss.intentos < 3:
-                st.info("¿Quieres realizar otro intento?")
-                if st.button("🔄 Quiero realizar otro intento"):
-                    ss.mostrar_form = True
-                    ss.mostrar_resultado = False
-                    st.rerun()
+        enviado = st.form_submit_button("Enviar respuestas")
 
-# --- Paso 3: Resultado final y reinicio ---
-if ss.intentos >= 3 and ss.mostrar_resultado:
-    st.warning("📛 Ya usaste los 3 intentos.")
-    st.info(f"🎯 Tu mejor nota fue: **{ss.mejor_nota}/10**")
-    if st.button("🔁 Reiniciar juego completamente"):
-        for k in list(st.session_state.keys()):
-            del st.session_state[k]
-        st.rerun()
+    if enviado:
+        correctas = sum(1 for i,p in enumerate(preguntas)
+                        if respuestas[i] == p["respuesta"])
+        nota = round((correctas / len(preguntas)) * 10, 2)
+        ss.intentos += 1
+        if nota > ss.mejor_nota:
+            ss.mejor_nota = nota
+        ss.mostrar_form = False
+        ss.mostrar_resultado = True
+
+# --- Paso 3: mostrar resultado y opción de reintento ---
+if ss.mostrar_resultado:
+    st.success(f"🎉 Intento {ss.intentos} completado. Mejor nota: {ss.mejor_nota}/10")
+    if ss.intentos < 3:
+        if st.button("🔄 Quiero realizar otro intento"):
+            ss.mostrar_form = True
+            ss.mostrar_resultado = False
+            st.rerun()
+    else:
+        st.warning("📛 Ya usaste los 3 intentos.")
+        if st.button("🔁 Reiniciar juego completamente"):
+            for k in list(ss.keys()):
+                del ss[k]
+            st.rerun()
