@@ -71,7 +71,7 @@ if st.session_state.jugar and st.session_state.intentos < 3:
             if nota > st.session_state.mejor_nota:
                 st.session_state.mejor_nota = nota
 
-            st.experimental_set_query_params(jugar="true")  # simular continuación
+            st.query_params(jugar="true")
 
 # --- Resultado final ---
 if st.session_state.intentos >= 3:
