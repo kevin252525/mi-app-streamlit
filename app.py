@@ -52,12 +52,14 @@ if not ss.jugar and ss.intentos < 3:
 # --- Definir preguntas ---
 preguntas = [
     {"pregunta":"¿Qué es una apuesta deportiva?",
-     "opciones":["Predicción sin dinero","Juego de azar con dinero","Inversión garantizada","Actividad ilegal"],
+     "opciones":["Predicción sin dinero","Juego de azar con dinero",
+                 "Inversión garantizada","Actividad ilegal"],
      "respuesta":"Juego de azar con dinero"},
     {"pregunta":"¿Qué significa 'cuota' en apuestas?",
-     "opciones":["Dinero apostado","Probabilidad de ganar","Pago potencial","Tipo de apuesta"],
+     "opciones":["Dinero apostado","Probabilidad de ganar",
+                 "Pago potencial","Tipo de apuesta"],
      "respuesta":"Pago potencial"},
-    # … aquí irían las otras 18 preguntas …
+    # ... añade aquí las demás preguntas ...
 ]
 
 # --- Paso 2: formulario de preguntas ---
@@ -73,35 +75,36 @@ if ss.jugar and ss.intentos < 3 and ss.mostrar_form:
         enviar = st.form_submit_button("Enviar respuestas")
 
     if enviar:
-        # validar que no haya quedado ninguna sin seleccionar
         if any(r=="-- Selecciona una opción --" for r in respuestas):
             st.error("❗ Debes responder todas las preguntas.")
         else:
-            correctas = sum(1 for i,p in enumerate(preguntas) if respuestas[i]==p["respuesta"])
+            correctas = sum(1 for i,p in enumerate(preguntas)
+                            if respuestas[i]==p["respuesta"])
             nota = round((correctas/len(preguntas))*10,2)
             ss.intentos += 1
             ss.mejor_nota = max(ss.mejor_nota, nota)
             ss.mostrar_form = False
             ss.mostrar_resultado = True
 
-# --- Paso 3: preguntar si quiere otro intento ---
+# --- Paso 3: preguntar si quiere otro intento con botones ---
 if ss.mostrar_resultado and ss.intentos < 3:
-    st.success(f"✅ Intento {ss.intentos} completado. Mejor nota hasta ahora: {ss.mejor_nota}/10")
-    decision = st.radio("¿Quieres realizar otro intento?", ["Sí", "No"], key="otra_vez")
-    if decision=="Sí":
-        if st.button("🔄 Empezar siguiente intento"):
+    st.success(f"✅ Intento {ss.intentos} completado. Mejor nota: {ss.mejor_nota}/10")
+    st.write("¿Quieres realizar otro intento?")
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Sí, otro intento"):
             ss.mostrar_form = True
             ss.mostrar_resultado = False
             st.rerun()
-    else:
-        st.info(f"🎯 Tu nota final es: **{ss.mejor_nota}/10**")
-        if st.button("🏠 Regresar a pantalla principal"):
-            # reiniciar todo para volver al input de nombre/edad
-            for k in list(ss.keys()):
-                del ss[k]
-            st.rerun()
+    with col2:
+        if st.button("No, ya terminé"):
+            st.info(f"🎯 Tu nota final es: **{ss.mejor_nota}/10**")
+            if st.button("🏠 Regresar a pantalla principal"):
+                for k in list(ss.keys()):
+                    del ss[k]
+                st.rerun()
 
-# --- Paso 4: si ya agotó intentos ---
+# --- Paso 4: si ya agotó los 3 intentos ---
 if ss.intentos >= 3 and ss.mostrar_resultado:
     st.warning("📛 Has usado los 3 intentos.")
     st.info(f"🎯 Tu nota final es: **{ss.mejor_nota}/10**")
