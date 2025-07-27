@@ -1,94 +1,66 @@
 import streamlit as st
 
-# Inicializar estados
-if "nombre" not in st.session_state:
-    st.session_state.nombre = ""
-if "edad" not in st.session_state:
-    st.session_state.edad = 0
-if "jugar" not in st.session_state:
-    st.session_state.jugar = False
+# Título del juego
+st.title("🔤 Sopa de Letras: Apuestas Deportivas")
+
+# Palabras a buscar
+palabras_clave = {"CUOTA", "RIESGO", "APUESTA", "PARLAY", "GANANCIA", "JUGADOR", "BOOKMAKER", "BANCA"}
+
+# Mostrar instrucciones
+st.info("Encuentra las palabras ocultas relacionadas con las apuestas deportivas. Escríbelas en el campo de abajo. ¡Tienes 8 intentos!")
+
+# Sopa de letras (manual para mostrar visualmente)
+sopa = """
+R I E S G O P A R L A Y
+U B O O K M A K E R G N
+A P U E S T A N B A N C
+S R T J U G A D O R M I
+C Q W E R T Y U I O P A
+"""
+
+st.text_area("🔍 Sopa de letras:", sopa, height=150, disabled=True)
+
+# Inicializar variables
+if "encontradas" not in st.session_state:
+    st.session_state.encontradas = set()
 if "intentos" not in st.session_state:
     st.session_state.intentos = 0
-if "mejor_nota" not in st.session_state:
-    st.session_state.mejor_nota = 0
 
-st.title("🎲 Juego de Apuestas Deportivas")
+# Entrada del usuario
+palabra = st.text_input("✍️ Escribe una palabra que encontraste:")
 
-# Paso 1: Datos personales
-if not st.session_state.jugar:
-    st.subheader("👤 Ingresa tus datos para comenzar")
-    st.session_state.nombre = st.text_input("Nombre")
-    st.session_state.edad = st.number_input("Edad", min_value=1, max_value=120, step=1)
-    if st.button("Iniciar juego"):
-        if st.session_state.nombre.strip() == "":
-            st.warning("Por favor ingresa tu nombre.")
-        elif st.session_state.edad < 18:
-            st.error("Debes tener al menos 18 años para jugar.")
-        elif st.session_state.intentos >= 3:
-            st.warning("Ya usaste los 3 intentos.")
-        else:
-            st.session_state.jugar = True
-            st.query_params(jugar="true")  # ✅ sin experimental
+if st.button("Validar palabra"):
+    palabra_mayus = palabra.strip().upper()
+    st.session_state.intentos += 1
 
-# Paso 2: Juego
-if st.session_state.jugar:
-    st.subheader(f"📋 Preguntas para {st.session_state.nombre}")
-    
-    preguntas = [
-        {
-            "pregunta": "¿Qué es una apuesta deportiva?",
-            "opciones": ["Un juego de mesa", "Una predicción sobre un evento deportivo", "Una lotería", "Una aplicación de ejercicio"],
-            "respuesta": "Una predicción sobre un evento deportivo"
-        },
-        {
-            "pregunta": "¿Qué significa 'cuota' en las apuestas?",
-            "opciones": ["El valor que pagas por apostar", "La probabilidad de que ocurra un resultado", "Una multa", "Un impuesto deportivo"],
-            "respuesta": "La probabilidad de que ocurra un resultado"
-        },
-        {
-            "pregunta": "¿Qué pasa si apuestas con 'hándicap'?",
-            "opciones": ["Juegas con ventaja o desventaja artificial", "No hay reglas", "Solo apuestas en vivo", "Se duplica tu apuesta"],
-            "respuesta": "Juegas con ventaja o desventaja artificial"
-        },
-        {
-            "pregunta": "¿Qué es el 'bankroll'?",
-            "opciones": ["El tipo de apuesta", "Tu presupuesto disponible para apostar", "La aplicación de apuestas", "La cuenta bancaria del jugador"],
-            "respuesta": "Tu presupuesto disponible para apostar"
-        }
-    ]
+    if palabra_mayus in palabras_clave and palabra_mayus not in st.session_state.encontradas:
+        st.success(f"✅ ¡Correcto! Encontraste: {palabra_mayus}")
+        st.session_state.encontradas.add(palabra_mayus)
+    elif palabra_mayus in st.session_state.encontradas:
+        st.warning("⚠️ Esa palabra ya la encontraste.")
+    else:
+        st.error("❌ Esa palabra no está en la lista.")
 
-    respuestas_usuario = []
-    for i, p in enumerate(preguntas):
-        st.markdown(f"**{i+1}. {p['pregunta']}**")
-        respuesta = st.radio("Selecciona una opción:", p["opciones"], key=i)
-        respuestas_usuario.append(respuesta)
-        st.write("")
+# Mostrar progreso
+st.markdown(f"🧠 Palabras encontradas: **{len(st.session_state.encontradas)} / {len(palabras_clave)}**")
+st.markdown(f"🕓 Intentos usados: **{st.session_state.intentos} / 8**")
 
-    enviado = st.button("Enviar respuestas")
+# Mostrar palabras ya encontradas
+if st.session_state.encontradas:
+    st.write("📌 Palabras encontradas:")
+    st.write(", ".join(sorted(st.session_state.encontradas)))
 
-    if enviado:
-        correctas = 0
-        for i, p in enumerate(preguntas):
-            if respuestas_usuario[i] == p["respuesta"]:
-                correctas += 1
-        nota = round((correctas / len(preguntas)) * 10, 2)
-        st.success(f"✅ Obtuviste {correctas} de {len(preguntas)} respuestas correctas. Nota: {nota}/10")
+# Fin del juego
+if len(st.session_state.encontradas) == len(palabras_clave):
+    st.balloons()
+    st.success("🎉 ¡Encontraste todas las palabras! ¡Buen trabajo!")
 
-        st.session_state.intentos += 1
-        if nota > st.session_state.mejor_nota:
-            st.session_state.mejor_nota = nota
+if st.session_state.intentos >= 8 and len(st.session_state.encontradas) < len(palabras_clave):
+    st.warning("😢 Se acabaron los intentos.")
 
-        if st.session_state.intentos >= 3:
-            st.warning("📛 Ya usaste los 3 intentos.")
-            st.info(f"🎯 Tu mejor nota fue: **{st.session_state.mejor_nota}/10**")
-        else:
-            if st.button("🔄 Volver a jugar"):
-                st.session_state.jugar = False
-                st.query_params(jugar="false")  # reset
+# Botón para reiniciar
+if st.button("🔁 Reiniciar juego"):
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
+    st.rerun()
 
-# Mostrar botón reset si ya acabó todo
-if st.session_state.intentos >= 3:
-    if st.button("🔁 Reiniciar juego completamente"):
-        for key in st.session_state.keys():
-            del st.session_state[key]
-        st.experimental_rerun()
