@@ -114,3 +114,4 @@ if ss.intentos >= 3 and ss.mostrar_resultado:
         for k in list(ss.keys()):
             del ss[k]
         st.rerun()
+        
