@@ -5,10 +5,10 @@ st.markdown("""
 <style>
 /* —––––––––––––––––––––––––––––––––– Base styles –––––––––––––––––––––––––––––––––— */
 
-/* Fondo suave y texto en negrita */
+/* Fondo general clarito */
 section.main {
-  background: #f0f4f8;
-  color: #0a0a0a;
+  background: #f0f4f8;    /* azul muy suave */
+  color: #0a0a0a;         /* texto negro para buen contraste */
   font-weight: bold;
 }
 
@@ -19,9 +19,10 @@ h1, h2, h3 {
   margin-bottom: 0.5em;
 }
 
-/* Tarjetas de pregunta */
+/* Tarjetas de pregunta: fondo blanco, texto inherente */
 .pregunta-card {
   background-color: #ffffff;
+  color: inherit;          /* hereda el #0a0a0a de section.main */
   border: 2px solid #4caf50;
   border-radius: 10px;
   padding: 1rem;
@@ -79,38 +80,30 @@ div.stButton > button:hover {
   border-color: #4caf50;
 }
 
-/* Alerts personalizados */
+/* Alertas */
 .stAlertInfo    { background:#bbdefb;  color:#0d47a1; border:1px solid #64b5f6; }
 .stAlertSuccess { background:#c8e6c9;  color:#1b5e20; border:1px solid #81c784; }
 .stAlertWarning { background:#ffe0b2;  color:#e65100; border:1px solid #ffb74d; }
 .stAlertError   { background:#ffcdd2;  color:#b71c1c; border:1px solid #e57373; }
 
-/* —––––––––––––––––––––––––––––––––– Responsive (pantallas ≤600px) –––––––––––––––––––––––––––––––––— */
+/* —––––––––––––––––––––––––––––––––– Responsive para móvil –––––––––––––––––––––––––––––––––— */
 @media only screen and (max-width: 600px) {
-  /* Reduce padding y margen de tarjetas */
   .pregunta-card {
     padding: 0.6rem;
     margin-bottom: 1rem;
   }
-  /* Encabezados más pequeños */
   h1 { font-size: 1.6rem !important; }
   h2 { font-size: 1.3rem !important; }
   h3 { font-size: 1.1rem !important; }
-
-  /* Inputs compactos */
   .stTextInput>div>div>input,
   .stNumberInput>div>div>input {
     font-size: 0.9rem;
     padding: 0.4em;
   }
-
-  /* Radios más compactos */
   .stRadio > div > label {
     font-size: 0.9rem;
     margin-bottom: 0.3rem;
   }
-
-  /* Botones fluidos */
   div.stButton > button {
     font-size: 0.9rem;
     padding: 0.5em 1em;
@@ -118,6 +111,7 @@ div.stButton > button:hover {
   }
 }
 </style>
+
 """, unsafe_allow_html=True)
 
 st.set_page_config(page_title="🎲 Apuestas Deportivas", layout="centered")
