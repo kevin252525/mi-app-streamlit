@@ -1,85 +1,92 @@
 import streamlit as st
 
-# === CSS personalizado con media query para móvil ===
+# === CSS personalizado ===
 st.markdown("""
 <style>
-/* Fondo suave y texto oscuro */
-section.main, .block-container {
-  background: #f0f4f8 !important;
-  color: #0a0a0a !important;
-  font-weight: bold !important;
+/* Fondo suave */
+section.main {
+  background: #f0f4f8;
+  color: #0a0a0a;
+  font-weight: bold;
 }
 
-/* Tarjeta de pregunta: verde pastel por defecto */
+/* Tarjeta de pregunta y encabezado de intento */
 .pregunta-card {
-  background-color: #ffffff !important;
-  border: 2px solid #4caf50 !important;
-  border-radius: 10px !important;
-  padding: 1rem !important;
-  margin-bottom: 1.5rem !important;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+  background-color: #fff3e0;        /* Fondo pastel muy suave */
+  border: 2px solid #ff7043;        /* Borde naranja vibrante */
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.pregunta-card h3 {
+  margin: 0;
 }
 
 /* Inputs amarillo pastel */
 .stTextInput>div>div>input,
 .stNumberInput>div>div>input {
-  background-color: #fff9c4 !important;
-  color: #0a0a0a !important;
-  border: 1px solid #fdd835 !important;
-  border-radius: 5px !important;
-  padding: 0.5em !important;
-  font-weight: bold !important;
+  background-color: #fff9c4;
+  color: #0a0a0a;
+  border: 1px solid #fdd835;
+  border-radius: 5px;
+  padding: 0.5em;
+  font-weight: bold;
 }
 
 /* Placeholder negrita y oscuro */
 .stTextInput>div>div>input::placeholder {
-  color: #666 !important;
-  font-weight: bold !important;
+  color: #666;
+  font-weight: bold;
 }
 
 /* Radios verde pastel */
 .stRadio > div > label {
-  font-weight: bold !important;
-  color: #0a0a0a !important;
-  margin-bottom: 0.5rem !important;
+  font-weight: bold;
+  color: #0a0a0a;
+  margin-bottom: 0.5rem;
 }
 .stRadio > div > label > input[type="radio"] + span:before {
-  border: 2px solid #66bb6a !important;
-  background-color: #e8f5e9 !important;
+  border: 2px solid #66bb6a;
+  background-color: #e8f5e9;
 }
 .stRadio > div > label > input[type="radio"]:checked + span:after {
-  background-color: #66bb6a !important;
-  border-color: #66bb6a !important;
+  background-color: #66bb6a;
+  border-color: #66bb6a;
 }
 
 /* Botones verde pastel */
 div.stButton > button {
-  background-color: #a5d6a7 !important;
-  color: #1b5e20 !important;
-  border: 2px solid #66bb6a !important;
-  padding: 0.6em 1.2em !important;
-  border-radius: 0.5em !important;
-  font-weight: bold !important;
-  font-size: 1em !important;
-  margin: 0.3em 0 !important;
-  width: 100% !important;
+  background-color: #a5d6a7;
+  color: #1b5e20;
+  border: 2px solid #66bb6a;
+  padding: 0.6em 1.2em;
+  border-radius: 0.5em;
+  font-weight: bold;
+  font-size: 1em;
+  margin: 0.3em 0;
+  width: 100%;
 }
 div.stButton > button:hover {
-  background-color: #81c784 !important;
-  border-color: #4caf50 !important;
+  background-color: #81c784;
+  border-color: #4caf50;
 }
 
 /* Encabezados naranja pastel */
 h1, h2, h3 {
-  color: #ffb74d !important;
-  font-weight: bold !important;
+  color: #ffb74d;
+  font-weight: bold;
 }
 
-/* SOLO MÓVIL: borde naranja vibrante en las tarjetas */
-@media only screen and (max-width: 600px) {
-  .pregunta-card {
-    background-color: #fff3e0 !important;
-    border: 2px solid #ff7043 !important;
+/* Ajustes para pantallas pequeñas: texto siempre oscuro */
+@media (max-width: 600px) {
+  .pregunta-card,
+  .pregunta-card strong,
+  .stRadio > div > label,
+  .stRadio > div > label > input[type="radio"] + span,
+  .stTextInput>div>div>input,
+  .stNumberInput>div>div>input {
+    color: #0a0a0a !important;
   }
 }
 </style>
@@ -126,7 +133,7 @@ if not ss.jugando and not ss.final and ss.intentos < 3:
             ss.show_q  = True
             st.rerun()
 
-# === Preguntas (extiende hasta 20) ===
+# === Preguntas (extender hasta 20) ===
 preguntas = [
     {"pregunta":"¿Qué es una apuesta deportiva?",
      "opciones":["Predicción sin dinero","Juego de azar con dinero","Inversión garantizada","Actividad ilegal"],
@@ -134,7 +141,7 @@ preguntas = [
     {"pregunta":"¿Qué significa 'cuota' en apuestas?",
      "opciones":["Dinero apostado","Probabilidad de ganar","Pago potencial","Tipo de apuesta"],
      "respuesta":"Pago potencial"},
-    # ... añade aquí las 18 preguntas restantes ...
+    # ... añade las 18 preguntas restantes ...
 ]
 
 # === 2) Cuestionario ===
@@ -189,7 +196,7 @@ if ss.show_decision:
                     key = f"q{idx}"
                     if key in ss:
                         del ss[key]
-                ss.show_q      = True
+                ss.show_q       = True
                 ss.show_decision = False
                 st.rerun()
         with col2:
