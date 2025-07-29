@@ -6,25 +6,29 @@ st.markdown("""
 /* Fondo suave */
 section.main {
   background: #f0f4f8;
-  color: #0a0a0a;           /* texto oscuro */
+  color: #0a0a0a;
   font-weight: bold;
 }
 
-/* Tarjeta de pregunta */
+/* Tarjeta de pregunta y encabezado de intento */
+/* Borde naranja vibrante y fondo pastel muy suave */
 .pregunta-card {
-  background-color: #ffffff;
-  border: 2px solid #4caf50;
+  background-color: #fff3e0;        /* Fondo pastel muy suave */
+  border: 2px solid #ff7043;        /* Borde naranja vibrante */
   border-radius: 10px;
   padding: 1rem;
   margin-bottom: 1.5rem;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.pregunta-card h3 {
+  margin: 0;
 }
 
 /* Inputs amarillo pastel */
 .stTextInput>div>div>input,
 .stNumberInput>div>div>input {
   background-color: #fff9c4;
-  color: #0a0a0a;           /* texto oscuro */
+  color: #0a0a0a;
   border: 1px solid #fdd835;
   border-radius: 5px;
   padding: 0.5em;
@@ -52,10 +56,10 @@ section.main {
   border-color: #66bb6a;
 }
 
-/* Botones verde pastel sin texto blanco */
+/* Botones verde pastel */
 div.stButton > button {
   background-color: #a5d6a7;
-  color: #1b5e20;           /* texto verde oscuro */
+  color: #1b5e20;
   border: 2px solid #66bb6a;
   padding: 0.6em 1.2em;
   border-radius: 0.5em;
@@ -79,11 +83,11 @@ h1, h2, h3 {
 
 st.set_page_config(page_title="🎲 Apuestas Deportivas", layout="centered")
 
-# --- Títulos (sin banner de imagen) ---
+# === Títulos ===
 st.markdown("<h1 style='text-align:center;'>🎲 Cuestionario Diagnóstico</h1>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align:center;'>Apuestas Deportivas</h2>", unsafe_allow_html=True)
 
-# --- Session State ---
+# === Session State ===
 ss = st.session_state
 for key, default in [
     ("nombre",""),
@@ -99,7 +103,7 @@ for key, default in [
     if key not in ss:
         ss[key] = default
 
-# --- 1) Formulario de Login ---
+# === 1) Formulario de Login ===
 if not ss.jugando and not ss.final and ss.intentos < 3:
     with st.form("login_form"):
         st.subheader("👤 Ingresa tus datos (≥18 años)")
@@ -118,7 +122,7 @@ if not ss.jugando and not ss.final and ss.intentos < 3:
             ss.show_q  = True
             st.rerun()
 
-# --- Ejemplo de preguntas (extiende hasta 20) ---
+# === Preguntas (extender hasta 20) ===
 preguntas = [
     {"pregunta":"¿Qué es una apuesta deportiva?",
      "opciones":["Predicción sin dinero","Juego de azar con dinero","Inversión garantizada","Actividad ilegal"],
@@ -126,10 +130,10 @@ preguntas = [
     {"pregunta":"¿Qué significa 'cuota' en apuestas?",
      "opciones":["Dinero apostado","Probabilidad de ganar","Pago potencial","Tipo de apuesta"],
      "respuesta":"Pago potencial"},
-    # ... añade aquí las 18 preguntas restantes ...
+    # ... añade las 18 preguntas restantes ...
 ]
 
-# --- 2) Cuestionario ---
+# === 2) Cuestionario ===
 if ss.jugando and ss.show_q and ss.intentos < 3:
     with st.form("quiz_form"):
         st.markdown(
@@ -164,7 +168,7 @@ if ss.jugando and ss.show_q and ss.intentos < 3:
                 ss.final = True
             st.rerun()
 
-# --- 3) Nota y decisión ---
+# === 3) Nota y decisión ===
 if ss.show_decision:
     st.info(f"🎯 Nota del intento: **{ss.nota_actual}/10**")
     st.success(f"⭐ Mejor nota hasta ahora: **{ss.mejor_nota}/10**")
@@ -189,7 +193,7 @@ if ss.show_decision:
                 ss.final = True
                 st.rerun()
 
-# --- 4) Pantalla final ---
+# === 4) Pantalla final ===
 if ss.final and not ss.show_q and not ss.show_decision:
     st.info(f"🏁 Tu nota final es: **{ss.mejor_nota}/10**")
     if st.button("🏠 Pantalla principal"):
