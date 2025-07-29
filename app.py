@@ -5,24 +5,22 @@ st.markdown("""
 <style>
 /* —––––––––––––––––––––––––––––––––– Base styles –––––––––––––––––––––––––––––––––— */
 
-/* Forzar fondo claro y texto oscuro en toda la app */
+/* Forzar fondo claro y texto gris oscuro en toda la app */
 .stApp, section.main, .block-container {
   background-color: #f0f4f8 !important;
-  color: #0a0a0a !important;
+  color: #212121 !important;     /* Gris oscuro */
   font-weight: bold;
 }
 
 /* Encabezados naranja pastel */
 h1, h2, h3 {
   color: #ffb74d !important;
-  font-weight: bold;
-  margin-bottom: 0.5em;
 }
 
-/* Tarjetas de pregunta: fondo blanco, texto oscuro */
+/* Tarjetas de pregunta: fondo blanco, texto gris oscuro */
 .pregunta-card {
   background-color: #ffffff !important;
-  color: #0a0a0a      !important;
+  color: #212121 !important;
   border: 2px solid #4caf50;
   border-radius: 10px;
   padding: 1rem;
@@ -34,7 +32,7 @@ h1, h2, h3 {
 .stTextInput>div>div>input,
 .stNumberInput>div>div>input {
   background-color: #fff9c4;
-  color: #0a0a0a;
+  color: #212121 !important;
   border: 1px solid #fdd835;
   border-radius: 5px;
   padding: 0.5em;
@@ -47,12 +45,11 @@ h1, h2, h3 {
   font-weight: bold;
 }
 
-/* Radios verde pastel con texto forzado */
+/* Radios verde pastel con texto gris oscuro */
 .stRadio > div > label,
 .stRadio > div > label span {
   font-weight: bold !important;
-  color: #0a0a0a !important;
-  margin-bottom: 0.5rem;
+  color: #212121 !important;
 }
 .stRadio > div > label > input[type="radio"] + span:before {
   border: 2px solid #66bb6a;
@@ -66,7 +63,7 @@ h1, h2, h3 {
 /* Botones verde pastel sin ancho fijo */
 div.stButton > button {
   background-color: #a5d6a7;
-  color: #1b5e20;
+  color: #212121 !important;     /* Texto gris en botones */
   border: 2px solid #66bb6a;
   padding: 0.6em 1.2em;
   border-radius: 0.5em;
@@ -116,6 +113,9 @@ div.stButton > button:hover {
 """, unsafe_allow_html=True)
 
 st.set_page_config(page_title="🎲 Apuestas Deportivas", layout="centered")
+
+# ... el resto de tu código sigue igual ...
+
 
 # --- Títulos sin banner de imagen ---
 st.markdown("<h1 style='text-align:center;'>🎲 Cuestionario Diagnóstico</h1>", unsafe_allow_html=True)
