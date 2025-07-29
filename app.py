@@ -3,59 +3,48 @@ import streamlit as st
 # --- CSS personalizado para apuestas deportivas ---
 st.markdown("""
 <style>
-/* Fondo general muy suave */
-section.main {
-  background: #f0f4f8;
-  color: #0a0a0a;
+/* Aumentar tamaño y peso de texto en general */
+body, .streamlit-expanderHeader, .stTextInput, .stNumberInput, .stRadio > div > label, .stMarkdown, .stMetric {
+  font-size: 1.1rem !important;
+  line-height: 1.4 !important;
+  font-weight: 500 !important;
 }
 
-/* Inputs en amarillo pastel */
+/* Títulos aún más grandes y gruesos */
+h1 {
+  font-size: 2.5rem !important;
+  font-weight: 700 !important;
+}
+h2 {
+  font-size: 2rem !important;
+  font-weight: 600 !important;
+}
+h3 {
+  font-size: 1.75rem !important;
+  font-weight: 600 !important;
+}
+
+/* Inputs y radios con texto destacado */
 .stTextInput>div>div>input,
-.stNumberInput>div>div>input {
-  background-color: #fff9c4;     /* Amarillo pastel */
-  color: #333;                   /* Texto oscuro para contraste */
-  border: 1px solid #fdd835;     /* Borde amarillento */
-  border-radius: 5px;
-  padding: 0.5em;
+.stNumberInput>div>div>input,
+.stRadio > div > label > span {
+  font-size: 1.15rem !important;
+  font-weight: 500 !important;
 }
 
-/* Placeholder también suave */
-.stTextInput>div>div>input::placeholder {
-  color: #666;
-}
-
-/* Botones en verde pastel */
+/* Botones con texto más grande */
 div.stButton > button {
-  background-color: #a5d6a7;     /* Verde pastel */
-  color: #1b5e20;
-  border: 2px solid #66bb6a;
-  padding: 0.6em 1.2em;
-  border-radius: 0.5em;
-  font-weight: bold;
-  font-size: 1em;
-  margin: 0.3em 0;
-  width: 100%;
-}
-div.stButton > button:hover {
-  background-color: #81c784;
-  border-color: #4caf50;
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
 }
 
-/* Radios con punto verde pastel */
-.stRadio > div > label > input[type="radio"] + span:before {
-  border: 2px solid #66bb6a;
-  background-color: #e8f5e9;
-}
-.stRadio > div > label > input[type="radio"]:checked + span:after {
-  background-color: #66bb6a;
-  border-color: #66bb6a;
-}
-
-/* Encabezados en naranja pastel */
-h1, h2, h3 {
-  color: #ffb74d;
+/* Asegurar buen contraste en placeholder */
+.stTextInput>div>div>input::placeholder {
+  color: #444 !important;
+  font-weight: 400 !important;
 }
 </style>
+
 
 """, unsafe_allow_html=True)
 
