@@ -1,82 +1,60 @@
 import streamlit as st
 
-# === CSS personalizado ===
+# === CSS general para inputs, radios y botones ===
 st.markdown("""
 <style>
-/* Fondo suave */
-section.main {
-  background: #f0f4f8;
-  color: #0a0a0a;
+/* Fondo y texto */
+section.main, .block-container {
+  background: #f0f4f8 !important;
+  color: #0a0a0a !important;
   font-weight: bold;
-}
-
-/* Tarjeta de pregunta y encabezado de intento */
-/* Borde naranja vibrante y fondo pastel muy suave */
-.pregunta-card {
-  background-color: #fff3e0;        /* Fondo pastel muy suave */
-  border: 2px solid #ff7043;        /* Borde naranja vibrante */
-  border-radius: 10px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-.pregunta-card h3 {
-  margin: 0;
 }
 
 /* Inputs amarillo pastel */
 .stTextInput>div>div>input,
 .stNumberInput>div>div>input {
-  background-color: #fff9c4;
-  color: #0a0a0a;
-  border: 1px solid #fdd835;
-  border-radius: 5px;
-  padding: 0.5em;
-  font-weight: bold;
-}
-
-/* Placeholder negrita y oscuro */
-.stTextInput>div>div>input::placeholder {
-  color: #666;
-  font-weight: bold;
+  background-color: #fff9c4 !important;
+  color: #0a0a0a !important;
+  border: 1px solid #fdd835 !important;
+  border-radius: 5px !important;
+  padding: 0.5em !important;
 }
 
 /* Radios verde pastel */
 .stRadio > div > label {
-  font-weight: bold;
-  color: #0a0a0a;
-  margin-bottom: 0.5rem;
+  font-weight: bold !important;
+  color: #0a0a0a !important;
 }
 .stRadio > div > label > input[type="radio"] + span:before {
-  border: 2px solid #66bb6a;
-  background-color: #e8f5e9;
+  border: 2px solid #66bb6a !important;
+  background-color: #e8f5e9 !important;
 }
 .stRadio > div > label > input[type="radio"]:checked + span:after {
-  background-color: #66bb6a;
-  border-color: #66bb6a;
+  background-color: #66bb6a !important;
+  border-color: #66bb6a !important;
 }
 
 /* Botones verde pastel */
 div.stButton > button {
-  background-color: #a5d6a7;
-  color: #1b5e20;
-  border: 2px solid #66bb6a;
-  padding: 0.6em 1.2em;
-  border-radius: 0.5em;
-  font-weight: bold;
-  font-size: 1em;
-  margin: 0.3em 0;
-  width: 100%;
+  background-color: #a5d6a7 !important;
+  color: #1b5e20 !important;
+  border: 2px solid #66bb6a !important;
+  padding: 0.6em 1.2em !important;
+  border-radius: 0.5em !important;
+  font-weight: bold !important;
+  font-size: 1em !important;
+  margin: 0.3em 0 !important;
+  width: 100% !important;
 }
 div.stButton > button:hover {
-  background-color: #81c784;
-  border-color: #4caf50;
+  background-color: #81c784 !important;
+  border-color: #4caf50 !important;
 }
 
 /* Encabezados naranja pastel */
 h1, h2, h3 {
-  color: #ffb74d;
-  font-weight: bold;
+  color: #ffb74d !important;
+  font-weight: bold !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -122,7 +100,7 @@ if not ss.jugando and not ss.final and ss.intentos < 3:
             ss.show_q  = True
             st.rerun()
 
-# === Preguntas (extender hasta 20) ===
+# === Lista de preguntas (añade hasta 20) ===
 preguntas = [
     {"pregunta":"¿Qué es una apuesta deportiva?",
      "opciones":["Predicción sin dinero","Juego de azar con dinero","Inversión garantizada","Actividad ilegal"],
@@ -130,26 +108,35 @@ preguntas = [
     {"pregunta":"¿Qué significa 'cuota' en apuestas?",
      "opciones":["Dinero apostado","Probabilidad de ganar","Pago potencial","Tipo de apuesta"],
      "respuesta":"Pago potencial"},
-    # ... añade las 18 preguntas restantes ...
+    # ... añade las 18 restantes ...
 ]
 
 # === 2) Cuestionario ===
 if ss.jugando and ss.show_q and ss.intentos < 3:
     with st.form("quiz_form"):
+        # Encabezado de intento con borde naranja y fondo pastel inline
         st.markdown(
-            f"<div class='pregunta-card'><h3>🏅 Intento {ss.intentos+1} de 3 — {ss.nombre}</h3></div>",
+            f"<div style='background:#fff3e0; border:2px solid #ff7043; border-radius:10px;"
+            f" padding:1rem; margin-bottom:1rem;'>"
+            f"<h3>🏅 Intento {ss.intentos+1} de 3 — {ss.nombre}</h3></div>",
             unsafe_allow_html=True
         )
         respuestas = []
         for i, p in enumerate(preguntas):
+            # Cada pregunta en tarjeta inline
             st.markdown(
-                f"<div class='pregunta-card'>🎯 <strong>{i+1}. {p['pregunta']}</strong></div>",
+                f"<div style='background:#fff3e0; border:2px solid #ff7043; border-radius:10px;"
+                f" padding:1rem; margin-bottom:1rem;'>"
+                f"🎯 <strong>{i+1}. {p['pregunta']}</strong>"
+                f"</div>",
                 unsafe_allow_html=True
             )
             opts = ["-- Selecciona una opción --"] + p["opciones"]
             sel = st.radio("", opts, index=0, key=f"q{i}")
             respuestas.append(sel)
+
         enviar = st.form_submit_button("💥 Enviar respuestas")
+
     if enviar:
         if any(r == "-- Selecciona una opción --" for r in respuestas):
             st.error("❗ Debes responder todas las preguntas.")
@@ -172,19 +159,20 @@ if ss.jugando and ss.show_q and ss.intentos < 3:
 if ss.show_decision:
     st.info(f"🎯 Nota del intento: **{ss.nota_actual}/10**")
     st.success(f"⭐ Mejor nota hasta ahora: **{ss.mejor_nota}/10**")
+
+    # Si fin de intentos, botón principal
     if ss.final:
         if st.button("🏠 Pantalla principal"):
-            for k in list(ss.keys()):
-                del ss[k]
+            for k in list(ss.keys()): del ss[k]
             st.rerun()
     else:
         col1, col2 = st.columns(2)
         with col1:
             if st.button("🔄 Sí, otro intento"):
+                # Limpiar radios
                 for idx in range(len(preguntas)):
                     key = f"q{idx}"
-                    if key in ss:
-                        del ss[key]
+                    if key in ss: del ss[key]
                 ss.show_q      = True
                 ss.show_decision = False
                 st.rerun()
@@ -197,6 +185,5 @@ if ss.show_decision:
 if ss.final and not ss.show_q and not ss.show_decision:
     st.info(f"🏁 Tu nota final es: **{ss.mejor_nota}/10**")
     if st.button("🏠 Pantalla principal"):
-        for k in list(ss.keys()):
-            del ss[k]
+        for k in list(ss.keys()): del ss[k]
         st.rerun()
