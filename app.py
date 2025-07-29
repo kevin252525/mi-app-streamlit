@@ -21,7 +21,6 @@ div.stButton > button:hover {
 st.set_page_config(page_title="Cuestionario Apuestas Deportivas", layout="centered")
 st.title("🎲 Cuestionario Diagnóstico - Apuestas Deportivas")
 
-# --- Sesión ---
 ss = st.session_state
 
 # Inicializar estado
@@ -39,23 +38,26 @@ for k, v in [
     if k not in ss:
         ss[k] = v
 
-# --- 1) Ingreso de datos ---
+# --- 1) FORMULARIO DE LOGIN con st.form ---
 if not ss.jugando and not ss.final and ss.intentos < 3:
-    st.subheader("👤 Ingresa tus datos (≥18 años)")
-    ss.nombre = st.text_input("Nombre", ss.nombre)
-    ss.edad = st.number_input("Edad", min_value=1, max_value=120, value=ss.edad, step=1)
-    if st.button("Iniciar juego"):
-        if ss.nombre.strip() == "":
+    with st.form("login_form"):
+        st.subheader("👤 Ingresa tus datos (≥18 años)")
+        nombre = st.text_input("Nombre", value=ss.nombre)
+        edad   = st.number_input("Edad", min_value=1, max_value=120, value=ss.edad, step=1)
+        iniciar = st.form_submit_button("Iniciar juego")
+    if iniciar:
+        if nombre.strip() == "":
             st.warning("❗ Por favor ingresa tu nombre.")
-        elif ss.edad < 18:
+        elif edad < 18:
             st.error("🚫 Debes tener al menos 18 años.")
         else:
+            ss.nombre = nombre
+            ss.edad   = edad
             ss.jugando = True
             ss.show_q = True
-            ss.show_decision = False
             st.rerun()
 
-# --- Tus 20 preguntas (aquí un ejemplo con 2; añade hasta 20) ---
+# --- Tus preguntas (ejemplo con 2; extiende a 20) ---
 preguntas = [
     {"pregunta": "¿Qué es una apuesta deportiva?",
      "opciones": ["Predicción sin dinero", "Juego de azar con dinero",
@@ -95,12 +97,11 @@ if ss.jugando and ss.show_q and ss.intentos < 3:
                 ss.final = True
             st.rerun()
 
-# --- 3) Mostrar nota y preguntar si continuar ---
+# --- 3) Mostrar nota y decidir ---
 if ss.show_decision:
     st.info(f"🎯 Nota del intento: **{ss.nota_actual}/10**")
     st.success(f"⭐ Mejor nota hasta ahora: **{ss.mejor_nota}/10**")
 
-    # Si ya es el 3º intento, mostrar directo Pantalla principal
     if ss.final:
         if st.button("🏠 Pantalla principal"):
             for k in list(ss.keys()):
@@ -110,7 +111,7 @@ if ss.show_decision:
         col1, col2 = st.columns(2)
         with col1:
             if st.button("🔄 Sí, otro intento"):
-                # limpiar radios
+                # Limpiar respuestas previas
                 for i in range(len(preguntas)):
                     key = f"q{i}"
                     if key in ss: del ss[key]
@@ -122,7 +123,7 @@ if ss.show_decision:
                 ss.final = True
                 st.rerun()
 
-# --- 4) Pantalla final tras elegir No o tras 3 intentos ---
+# --- 4) Pantalla final ---
 if ss.final and not ss.show_q and not ss.show_decision:
     st.info(f"🏁 Tu nota final es: **{ss.mejor_nota}/10**")
     if st.button("🏠 Pantalla principal"):
