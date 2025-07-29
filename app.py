@@ -3,82 +3,60 @@ import streamlit as st
 # --- CSS personalizado para apuestas deportivas ---
 st.markdown("""
 <style>
-/* Fondo general claro */
+/* Fondo general muy suave */
 section.main {
-  background: #e3f2fd;  /* Azul muy suave */
+  background: #f0f4f8;
   color: #0a0a0a;
 }
-/* Encabezados */
-h1, h2, h3 {
-  font-family: 'Arial Black', sans-serif;
-  color: #ff8f00;  /* Naranja dorado */
+
+/* Inputs en amarillo pastel */
+.stTextInput>div>div>input,
+.stNumberInput>div>div>input {
+  background-color: #fff9c4;     /* Amarillo pastel */
+  color: #333;                   /* Texto oscuro para contraste */
+  border: 1px solid #fdd835;     /* Borde amarillento */
+  border-radius: 5px;
+  padding: 0.5em;
 }
-/* Tarjetas de contenido */
-.stCard {
-  background-color: #ffffff;
-  border: 2px solid #4caf50;  /* Verde vivo */
-  border-radius: 10px;
-  padding: 1rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+/* Placeholder también suave */
+.stTextInput>div>div>input::placeholder {
+  color: #666;
 }
-/* Botones */
+
+/* Botones en verde pastel */
 div.stButton > button {
-  background-color: #4caf50;  /* Verde apuestas */
-  color: white;
-  border: 2px solid #ff8f00;  /* Naranja */
+  background-color: #a5d6a7;     /* Verde pastel */
+  color: #1b5e20;
+  border: 2px solid #66bb6a;
   padding: 0.6em 1.2em;
   border-radius: 0.5em;
   font-weight: bold;
   font-size: 1em;
-  margin: 0.3em;
+  margin: 0.3em 0;
   width: 100%;
 }
 div.stButton > button:hover {
-  background-color: #388e3c;  /* Verde más oscuro */
-  border-color: #ef6c00;      /* Naranja más oscuro */
-}
-/* Inputs */
-.stTextInput>div>div>input,
-.stNumberInput>div>div>input {
-  background-color: #fffde7;  /* Amarillo muy suave */
-  color: #0a0a0a;
-  border: 1px solid #ffd54f;   /* Amarillo */
-  border-radius: 5px;
-}
-/* Radios */
-.stRadio > div > label {
-  font-size: 0.95em;
-}
-.stRadio > div > label > input[type="radio"] + span:before {
-  border: 2px solid #4caf50;
-  background-color: #e8f5e9;  /* Verde muy suave */
-}
-.stRadio > div > label > input[type="radio"]:checked + span:after {
-  background-color: #4caf50;
+  background-color: #81c784;
   border-color: #4caf50;
 }
-/* Alertas */
-.stAlertInfo {
-  background-color: #bbdefb;
-  color: #0d47a1;
-  border: 1px solid #64b5f6;
+
+/* Radios con punto verde pastel */
+.stRadio > div > label > input[type="radio"] + span:before {
+  border: 2px solid #66bb6a;
+  background-color: #e8f5e9;
 }
-.stAlertSuccess {
-  background-color: #c8e6c9;
-  color: #1b5e20;
-  border: 1px solid #81c784;
+.stRadio > div > label > input[type="radio"]:checked + span:after {
+  background-color: #66bb6a;
+  border-color: #66bb6a;
 }
-.stAlertWarning {
-  background-color: #ffe0b2;
-  color: #e65100;
-  border: 1px solid #ffb74d;
-}
-.stAlertError {
-  background-color: #ffcdd2;
-  color: #b71c1c;
-  border: 1px solid #e57373;
+
+/* Encabezados en naranja pastel */
+h1, h2, h3 {
+  color: #ffb74d;
 }
 </style>
+
 """, unsafe_allow_html=True)
 
 st.set_page_config(page_title="🎲 Apuestas Deportivas", layout="wide")
