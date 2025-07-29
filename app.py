@@ -1,5 +1,15 @@
 import streamlit as st
 
+# === Ocultar icono de GitHub en el header de Streamlit Cloud ===
+st.markdown("""
+<style>
+/* Esconde cualquier enlace en el header que apunte a github.com */
+header a[href*="github.com"] {
+    display: none !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # === CSS personalizado ===
 st.markdown("""
 <style>
