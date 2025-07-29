@@ -5,24 +5,24 @@ st.markdown("""
 <style>
 /* —––––––––––––––––––––––––––––––––– Base styles –––––––––––––––––––––––––––––––––— */
 
-/* Fondo general clarito */
-section.main {
-  background: #f0f4f8;    /* azul muy suave */
-  color: #0a0a0a;         /* texto negro para buen contraste */
+/* Forzar fondo claro y texto oscuro en toda la app */
+.stApp, section.main, .block-container {
+  background-color: #f0f4f8 !important;
+  color: #0a0a0a !important;
   font-weight: bold;
 }
 
 /* Encabezados naranja pastel */
 h1, h2, h3 {
-  color: #ffb74d;
+  color: #ffb74d !important;
   font-weight: bold;
   margin-bottom: 0.5em;
 }
 
-/* Tarjetas de pregunta: fondo blanco, texto inherente */
+/* Tarjetas de pregunta: fondo blanco, texto oscuro */
 .pregunta-card {
-  background-color: #ffffff;
-  color: inherit;          /* hereda el #0a0a0a de section.main */
+  background-color: #ffffff !important;
+  color: #0a0a0a      !important;
   border: 2px solid #4caf50;
   border-radius: 10px;
   padding: 1rem;
@@ -34,7 +34,7 @@ h1, h2, h3 {
 .stTextInput>div>div>input,
 .stNumberInput>div>div>input {
   background-color: #fff9c4;
-  color: #333;
+  color: #0a0a0a;
   border: 1px solid #fdd835;
   border-radius: 5px;
   padding: 0.5em;
@@ -47,9 +47,11 @@ h1, h2, h3 {
   font-weight: bold;
 }
 
-/* Radios verde pastel */
-.stRadio > div > label {
-  font-weight: bold;
+/* Radios verde pastel con texto forzado */
+.stRadio > div > label,
+.stRadio > div > label span {
+  font-weight: bold !important;
+  color: #0a0a0a !important;
   margin-bottom: 0.5rem;
 }
 .stRadio > div > label > input[type="radio"] + span:before {
@@ -111,7 +113,6 @@ div.stButton > button:hover {
   }
 }
 </style>
-
 """, unsafe_allow_html=True)
 
 st.set_page_config(page_title="🎲 Apuestas Deportivas", layout="centered")
@@ -158,7 +159,8 @@ if not ss.jugando and not ss.final and ss.intentos < 3:
 # --- Preguntas (20) ---
 preguntas = [
     {"pregunta": "¿Qué es una apuesta deportiva?",
-     "opciones": ["Predicción sin dinero","Juego de azar con dinero","Inversión garantizada","Actividad ilegal"],
+     "opciones": ["Predicción sin dinero","Juego de azar con dinero",
+                  "Inversión garantizada","Actividad ilegal"],
      "respuesta": "Juego de azar con dinero"},
     {"pregunta": "¿Qué significa 'cuota' en apuestas?",
      "opciones": ["Dinero apostado","Probabilidad de ganar","Pago potencial","Tipo de apuesta"],
