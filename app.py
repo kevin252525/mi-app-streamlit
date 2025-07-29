@@ -84,10 +84,10 @@ h1, h2, h3 {
 
 st.set_page_config(page_title="🎲 Apuestas Deportivas", layout="centered")
 
-# --- Banner de bienvenida ---
+# --- Banner de bienvenida (actualizado) ---
 st.image(
     "https://example.com/tu-imagen-estadio.jpg",  # Sustituye con tu URL
-    use_column_width=True,
+    use_container_width=True,
     caption="¡Bienvenido al cuestionario de apuestas deportivas!"
 )
 
@@ -143,10 +143,16 @@ preguntas = [
 # --- 2) Cuestionario ---
 if ss.jugando and ss.show_q and ss.intentos < 3:
     with st.form("quiz_form"):
-        st.markdown(f"<div class='pregunta-card'><h3>🏅 Intento {ss.intentos+1} de 3 — {ss.nombre}</h3></div>", unsafe_allow_html=True)
+        st.markdown(
+            f"<div class='pregunta-card'><h3>🏅 Intento {ss.intentos+1} de 3 — {ss.nombre}</h3></div>",
+            unsafe_allow_html=True
+        )
         respuestas = []
         for i, p in enumerate(preguntas):
-            st.markdown(f"<div class='pregunta-card'>🎯 <strong>{i+1}. {p['pregunta']}</strong></div>", unsafe_allow_html=True)
+            st.markdown(
+                f"<div class='pregunta-card'>🎯 <strong>{i+1}. {p['pregunta']}</strong></div>",
+                unsafe_allow_html=True
+            )
             opts = ["-- Selecciona una opción --"] + p["opciones"]
             sel = st.radio("", opts, index=0, key=f"q{i}")
             respuestas.append(sel)
@@ -155,7 +161,10 @@ if ss.jugando and ss.show_q and ss.intentos < 3:
         if any(r == "-- Selecciona una opción --" for r in respuestas):
             st.error("❗ Debes responder todas las preguntas.")
         else:
-            aciertos = sum(1 for idx, p in enumerate(preguntas) if respuestas[idx] == p["respuesta"])
+            aciertos = sum(
+                1 for idx, p in enumerate(preguntas)
+                if respuestas[idx] == p["respuesta"]
+            )
             nota = round((aciertos / len(preguntas)) * 10, 2)
             ss.nota_actual = nota
             ss.mejor_nota  = max(ss.mejor_nota, nota)
@@ -179,10 +188,10 @@ if ss.show_decision:
         col1, col2 = st.columns(2)
         with col1:
             if st.button("🔄 Sí, otro intento"):
-                # Limpia selecciones anteriores
                 for idx in range(len(preguntas)):
                     key = f"q{idx}"
-                    if key in ss: del ss[key]
+                    if key in ss:
+                        del ss[key]
                 ss.show_q      = True
                 ss.show_decision = False
                 st.rerun()
