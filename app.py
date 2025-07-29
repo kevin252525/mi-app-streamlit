@@ -1,26 +1,18 @@
 import streamlit as st
 
-# === CSS personalizado y responsivo ===
+# === CSS personalizado ===
 st.markdown("""
 <style>
-/* —––––––––––––––––––––––––––––––––– Base styles –––––––––––––––––––––––––––––––––— */
-
-/* Forzar fondo claro y texto gris oscuro en toda la app */
-.stApp, section.main, .block-container {
-  background-color: #f0f4f8 !important;
-  color: #212121 !important;     /* Gris oscuro */
+/* Fondo suave */
+section.main {
+  background: #f0f4f8;
+  color: #0a0a0a;           /* texto oscuro */
   font-weight: bold;
 }
 
-/* Encabezados naranja pastel */
-h1, h2, h3 {
-  color: #ffb74d !important;
-}
-
-/* Tarjetas de pregunta: fondo blanco, texto gris oscuro */
+/* Tarjeta de pregunta */
 .pregunta-card {
-  background-color: #ffffff !important;
-  color: #212121 !important;
+  background-color: #ffffff;
   border: 2px solid #4caf50;
   border-radius: 10px;
   padding: 1rem;
@@ -32,24 +24,24 @@ h1, h2, h3 {
 .stTextInput>div>div>input,
 .stNumberInput>div>div>input {
   background-color: #fff9c4;
-  color: #212121 !important;
+  color: #0a0a0a;           /* texto oscuro */
   border: 1px solid #fdd835;
   border-radius: 5px;
   padding: 0.5em;
   font-weight: bold;
 }
 
-/* Placeholder negrita */
+/* Placeholder negrita y oscuro */
 .stTextInput>div>div>input::placeholder {
   color: #666;
   font-weight: bold;
 }
 
-/* Radios verde pastel con texto gris oscuro */
-.stRadio > div > label,
-.stRadio > div > label span {
-  font-weight: bold !important;
-  color: #212121 !important;
+/* Radios verde pastel */
+.stRadio > div > label {
+  font-weight: bold;
+  color: #0a0a0a;
+  margin-bottom: 0.5rem;
 }
 .stRadio > div > label > input[type="radio"] + span:before {
   border: 2px solid #66bb6a;
@@ -60,64 +52,34 @@ h1, h2, h3 {
   border-color: #66bb6a;
 }
 
-/* Botones verde pastel sin ancho fijo */
+/* Botones verde pastel sin texto blanco */
 div.stButton > button {
   background-color: #a5d6a7;
-  color: #212121 !important;     /* Texto gris en botones */
+  color: #1b5e20;           /* texto verde oscuro */
   border: 2px solid #66bb6a;
   padding: 0.6em 1.2em;
   border-radius: 0.5em;
   font-weight: bold;
   font-size: 1em;
-  margin: 0.5em auto;
-  display: block;
-  max-width: 280px;
-  width: auto;
+  margin: 0.3em 0;
+  width: 100%;
 }
 div.stButton > button:hover {
   background-color: #81c784;
   border-color: #4caf50;
 }
 
-/* Alertas */
-.stAlertInfo    { background:#bbdefb;  color:#0d47a1; border:1px solid #64b5f6; }
-.stAlertSuccess { background:#c8e6c9;  color:#1b5e20; border:1px solid #81c784; }
-.stAlertWarning { background:#ffe0b2;  color:#e65100; border:1px solid #ffb74d; }
-.stAlertError   { background:#ffcdd2;  color:#b71c1c; border:1px solid #e57373; }
-
-/* —––––––––––––––––––––––––––––––––– Responsive para móvil –––––––––––––––––––––––––––––––––— */
-@media only screen and (max-width: 600px) {
-  .pregunta-card {
-    padding: 0.6rem;
-    margin-bottom: 1rem;
-  }
-  h1 { font-size: 1.6rem !important; }
-  h2 { font-size: 1.3rem !important; }
-  h3 { font-size: 1.1rem !important; }
-  .stTextInput>div>div>input,
-  .stNumberInput>div>div>input {
-    font-size: 0.9rem;
-    padding: 0.4em;
-  }
-  .stRadio > div > label {
-    font-size: 0.9rem;
-    margin-bottom: 0.3rem;
-  }
-  div.stButton > button {
-    font-size: 0.9rem;
-    padding: 0.5em 1em;
-    max-width: 100%;
-  }
+/* Encabezados naranja pastel */
+h1, h2, h3 {
+  color: #ffb74d;
+  font-weight: bold;
 }
 </style>
 """, unsafe_allow_html=True)
 
 st.set_page_config(page_title="🎲 Apuestas Deportivas", layout="centered")
 
-# ... el resto de tu código sigue igual ...
-
-
-# --- Títulos sin banner de imagen ---
+# --- Títulos (sin banner de imagen) ---
 st.markdown("<h1 style='text-align:center;'>🎲 Cuestionario Diagnóstico</h1>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align:center;'>Apuestas Deportivas</h2>", unsafe_allow_html=True)
 
@@ -156,16 +118,15 @@ if not ss.jugando and not ss.final and ss.intentos < 3:
             ss.show_q  = True
             st.rerun()
 
-# --- Preguntas (20) ---
+# --- Ejemplo de preguntas (extiende hasta 20) ---
 preguntas = [
-    {"pregunta": "¿Qué es una apuesta deportiva?",
-     "opciones": ["Predicción sin dinero","Juego de azar con dinero",
-                  "Inversión garantizada","Actividad ilegal"],
-     "respuesta": "Juego de azar con dinero"},
-    {"pregunta": "¿Qué significa 'cuota' en apuestas?",
-     "opciones": ["Dinero apostado","Probabilidad de ganar","Pago potencial","Tipo de apuesta"],
-     "respuesta": "Pago potencial"},
-    # ... añade las 18 restantes ...
+    {"pregunta":"¿Qué es una apuesta deportiva?",
+     "opciones":["Predicción sin dinero","Juego de azar con dinero","Inversión garantizada","Actividad ilegal"],
+     "respuesta":"Juego de azar con dinero"},
+    {"pregunta":"¿Qué significa 'cuota' en apuestas?",
+     "opciones":["Dinero apostado","Probabilidad de ganar","Pago potencial","Tipo de apuesta"],
+     "respuesta":"Pago potencial"},
+    # ... añade aquí las 18 preguntas restantes ...
 ]
 
 # --- 2) Cuestionario ---
