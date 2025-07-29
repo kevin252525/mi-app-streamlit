@@ -10,12 +10,6 @@ section.main {
   font-weight: bold;
 }
 
-/* Banner */
-.banner-img {
-  border-radius: 10px;
-  margin-bottom: 1.5rem;
-}
-
 /* Tarjeta de pregunta */
 .pregunta-card {
   background-color: #ffffff;
@@ -84,13 +78,7 @@ h1, h2, h3 {
 
 st.set_page_config(page_title="🎲 Apuestas Deportivas", layout="centered")
 
-# --- Banner de bienvenida (actualizado) ---
-st.image(
-    "https://example.com/tu-imagen-estadio.jpg",  # Sustituye con tu URL
-    use_container_width=True,
-    caption="¡Bienvenido al cuestionario de apuestas deportivas!"
-)
-
+# --- Títulos sin banner de imagen ---
 st.markdown("<h1 style='text-align:center;'>🎲 Cuestionario Diagnóstico</h1>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align:center;'>Apuestas Deportivas</h2>", unsafe_allow_html=True)
 
