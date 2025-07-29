@@ -1,15 +1,5 @@
 import streamlit as st
 
-# === Ocultar icono de GitHub en el header de Streamlit Cloud ===
-st.markdown("""
-<style>
-/* Esconde cualquier enlace en el header que apunte a github.com */
-header a[href*="github.com"] {
-    display: none !important;
-}
-</style>
-""", unsafe_allow_html=True)
-
 # === CSS personalizado ===
 st.markdown("""
 <style>
@@ -22,8 +12,8 @@ section.main {
 
 /* Tarjeta de pregunta y encabezado de intento */
 .pregunta-card {
-  background-color: #fff3e0;        /* Fondo pastel muy suave */
-  border: 2px solid #ff7043;        /* Borde naranja vibrante */
+  background-color: #fff3e0;
+  border: 2px solid #ff7043;
   border-radius: 10px;
   padding: 1rem;
   margin-bottom: 1.5rem;
@@ -33,7 +23,7 @@ section.main {
   margin: 0;
 }
 
-/* Inputs amarillo pastel */
+/* Campos de entrada en amarillo pastel */
 .stTextInput>div>div>input,
 .stNumberInput>div>div>input {
   background-color: #fff9c4;
@@ -44,13 +34,13 @@ section.main {
   font-weight: bold;
 }
 
-/* Placeholder negrita y oscuro */
+/* Placeholder en negrita */
 .stTextInput>div>div>input::placeholder {
   color: #666;
   font-weight: bold;
 }
 
-/* Radios verde pastel */
+/* Radios en verde pastel */
 .stRadio > div > label {
   font-weight: bold;
   color: #0a0a0a;
@@ -65,7 +55,7 @@ section.main {
   border-color: #66bb6a;
 }
 
-/* Botones verde pastel */
+/* Botones en verde pastel */
 div.stButton > button {
   background-color: #a5d6a7;
   color: #1b5e20;
@@ -82,13 +72,13 @@ div.stButton > button:hover {
   border-color: #4caf50;
 }
 
-/* Encabezados naranja pastel */
+/* Encabezados en naranja pastel */
 h1, h2, h3 {
   color: #ffb74d;
   font-weight: bold;
 }
 
-/* Ajustes para pantallas pequeñas: texto siempre oscuro */
+/* Forzar texto oscuro en móviles */
 @media (max-width: 600px) {
   .pregunta-card,
   .pregunta-card strong,
@@ -102,11 +92,11 @@ h1, h2, h3 {
 </style>
 """, unsafe_allow_html=True)
 
-st.set_page_config(page_title="🎲 Apuestas Deportivas", layout="centered")
+st.set_page_config(page_title="🎲 Cuestionario de Apuestas Deportivas", layout="centered")
 
 # === Títulos ===
-st.markdown("<h1 style='text-align:center;'>🎲 Cuestionario Diagnóstico</h1>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align:center;'>Apuestas Deportivas</h2>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center;'>🎲 Cuestionario Diagnóstico de Apuestas Deportivas</h1>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align:center;'>Compruebe sus conocimientos</h2>", unsafe_allow_html=True)
 
 # === Session State ===
 ss = st.session_state
@@ -124,18 +114,18 @@ for key, default in [
     if key not in ss:
         ss[key] = default
 
-# === 1) Formulario de Login ===
+# === 1) Formulario de datos ===
 if not ss.jugando and not ss.final and ss.intentos < 3:
     with st.form("login_form"):
-        st.subheader("👤 Ingresa tus datos (≥18 años)")
-        nombre = st.text_input("Nombre", ss.nombre, placeholder="Tu nombre aquí")
+        st.subheader("👤 Por favor, ingrese sus datos (≥18 años)")
+        nombre = st.text_input("Nombre completo", ss.nombre, placeholder="Ingrese su nombre")
         edad   = st.number_input("Edad", min_value=1, max_value=120, value=ss.edad, step=1)
-        iniciar = st.form_submit_button("🟢 Iniciar juego")
+        iniciar = st.form_submit_button("🟢 Iniciar cuestionario")
     if iniciar:
-        if nombre.strip() == "":
-            st.warning("❗ Debes ingresar tu nombre.")
+        if not nombre.strip():
+            st.warning("❗ Por favor, ingrese su nombre.")
         elif edad < 18:
-            st.error("🚫 Debes tener al menos 18 años.")
+            st.error("🚫 Debe tener al menos 18 años para continuar.")
         else:
             ss.nombre = nombre
             ss.edad   = edad
@@ -143,15 +133,17 @@ if not ss.jugando and not ss.final and ss.intentos < 3:
             ss.show_q  = True
             st.rerun()
 
-# === Preguntas (extender hasta 20) ===
+# === Listado de preguntas (complete hasta 20) ===
 preguntas = [
     {"pregunta":"¿Qué es una apuesta deportiva?",
-     "opciones":["Predicción sin dinero","Juego de azar con dinero","Inversión garantizada","Actividad ilegal"],
+     "opciones":["Predicción sin dinero","Juego de azar con dinero",
+                 "Inversión garantizada","Actividad ilegal"],
      "respuesta":"Juego de azar con dinero"},
     {"pregunta":"¿Qué significa 'cuota' en apuestas?",
-     "opciones":["Dinero apostado","Probabilidad de ganar","Pago potencial","Tipo de apuesta"],
+     "opciones":["Dinero apostado","Probabilidad de ganar",
+                 "Pago potencial","Tipo de apuesta"],
      "respuesta":"Pago potencial"},
-    # ... añade las 18 preguntas restantes ...
+    # … agregue aquí las restantes …
 ]
 
 # === 2) Cuestionario ===
@@ -167,18 +159,15 @@ if ss.jugando and ss.show_q and ss.intentos < 3:
                 f"<div class='pregunta-card'>🎯 <strong>{i+1}. {p['pregunta']}</strong></div>",
                 unsafe_allow_html=True
             )
-            opts = ["-- Selecciona una opción --"] + p["opciones"]
-            sel = st.radio("", opts, index=0, key=f"q{i}")
+            opciones = ["-- Seleccione una opción --"] + p["opciones"]
+            sel = st.radio("", opciones, index=0, key=f"q{i}")
             respuestas.append(sel)
         enviar = st.form_submit_button("💥 Enviar respuestas")
     if enviar:
-        if any(r == "-- Selecciona una opción --" for r in respuestas):
-            st.error("❗ Debes responder todas las preguntas.")
+        if any(r == "-- Seleccione una opción --" for r in respuestas):
+            st.error("❗ Por favor, responda todas las preguntas antes de continuar.")
         else:
-            aciertos = sum(
-                1 for idx, p in enumerate(preguntas)
-                if respuestas[idx] == p["respuesta"]
-            )
+            aciertos = sum(1 for idx, p in enumerate(preguntas) if respuestas[idx] == p["respuesta"])
             nota = round((aciertos / len(preguntas)) * 10, 2)
             ss.nota_actual = nota
             ss.mejor_nota  = max(ss.mejor_nota, nota)
@@ -189,12 +178,12 @@ if ss.jugando and ss.show_q and ss.intentos < 3:
                 ss.final = True
             st.rerun()
 
-# === 3) Nota y decisión ===
+# === 3) Mostrar nota y decisión ===
 if ss.show_decision:
-    st.info(f"🎯 Nota del intento: **{ss.nota_actual}/10**")
-    st.success(f"⭐ Mejor nota hasta ahora: **{ss.mejor_nota}/10**")
+    st.info(f"🎯 Nota de este intento: **{ss.nota_actual}/10**")
+    st.success(f"⭐ Mejor nota obtenida: **{ss.mejor_nota}/10**")
     if ss.final:
-        if st.button("🏠 Pantalla principal"):
+        if st.button("🏠 Volver al inicio"):
             for k in list(ss.keys()):
                 del ss[k]
             st.rerun()
@@ -210,14 +199,14 @@ if ss.show_decision:
                 ss.show_decision = False
                 st.rerun()
         with col2:
-            if st.button("❌ No, no quiero otro intento"):
+            if st.button("❌ No, deseo finalizar"):
                 ss.final = True
                 st.rerun()
 
 # === 4) Pantalla final ===
 if ss.final and not ss.show_q and not ss.show_decision:
-    st.info(f"🏁 Tu nota final es: **{ss.mejor_nota}/10**")
-    if st.button("🏠 Pantalla principal"):
+    st.info(f"🏁 Nota final: **{ss.mejor_nota}/10**")
+    if st.button("🏠 Volver al inicio"):
         for k in list(ss.keys()):
             del ss[k]
         st.rerun()
