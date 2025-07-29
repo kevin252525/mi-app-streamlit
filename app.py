@@ -1,31 +1,31 @@
 import streamlit as st
 
-# --- CSS personalizado para tema de apuestas ---
+# --- CSS personalizado para apuestas deportivas ---
 st.markdown("""
 <style>
-/* Fondo general */
+/* Fondo general claro */
 section.main {
-  background: #1a1a1a;
-  color: #f2f2f2;
+  background: #e3f2fd;  /* Azul muy suave */
+  color: #0a0a0a;
 }
-/* Encabezado */
+/* Encabezados */
 h1, h2, h3 {
-  font-family: 'Segoe UI', sans-serif;
-  color: #FFD700;  /* Dorado */
+  font-family: 'Arial Black', sans-serif;
+  color: #ff8f00;  /* Naranja dorado */
 }
-/* Tarjetas */
+/* Tarjetas de contenido */
 .stCard {
-  background-color: #2e2e2e;
-  border: 2px solid #444;
+  background-color: #ffffff;
+  border: 2px solid #4caf50;  /* Verde vivo */
   border-radius: 10px;
   padding: 1rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 /* Botones */
 div.stButton > button {
-  background-color: #00b300;  /* Verde apuestas */
+  background-color: #4caf50;  /* Verde apuestas */
   color: white;
-  border: 2px solid #FFD700;
+  border: 2px solid #ff8f00;  /* Naranja */
   padding: 0.6em 1.2em;
   border-radius: 0.5em;
   font-weight: bold;
@@ -34,65 +34,65 @@ div.stButton > button {
   width: 100%;
 }
 div.stButton > button:hover {
-  background-color: #009900;
-  border-color: #FFA500;
+  background-color: #388e3c;  /* Verde más oscuro */
+  border-color: #ef6c00;      /* Naranja más oscuro */
 }
 /* Inputs */
-.stTextInput>div>div>input, .stNumberInput>div>div>input {
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #555;
+.stTextInput>div>div>input,
+.stNumberInput>div>div>input {
+  background-color: #fffde7;  /* Amarillo muy suave */
+  color: #0a0a0a;
+  border: 1px solid #ffd54f;   /* Amarillo */
+  border-radius: 5px;
 }
-/* Radios estilo personalizado */
-.stRadio > label {
+/* Radios */
+.stRadio > div > label {
   font-size: 0.95em;
 }
 .stRadio > div > label > input[type="radio"] + span:before {
-  border: 2px solid #FFD700;
-  background-color: #1a1a1a;
+  border: 2px solid #4caf50;
+  background-color: #e8f5e9;  /* Verde muy suave */
 }
 .stRadio > div > label > input[type="radio"]:checked + span:after {
-  background-color: #FFD700;
-  border-color: #FFD700;
+  background-color: #4caf50;
+  border-color: #4caf50;
 }
-/* Infos y warnings */
+/* Alertas */
 .stAlertInfo {
-  background-color: #004d66;
-  color: #e6f7ff;
-  border: 1px solid #00aaff;
+  background-color: #bbdefb;
+  color: #0d47a1;
+  border: 1px solid #64b5f6;
 }
 .stAlertSuccess {
-  background-color: #004d11;
-  color: #ccffcc;
-  border: 1px solid #00e600;
+  background-color: #c8e6c9;
+  color: #1b5e20;
+  border: 1px solid #81c784;
 }
 .stAlertWarning {
-  background-color: #663300;
-  color: #ffe6cc;
-  border: 1px solid #ff9900;
+  background-color: #ffe0b2;
+  color: #e65100;
+  border: 1px solid #ffb74d;
 }
 .stAlertError {
-  background-color: #660000;
-  color: #ffcccc;
-  border: 1px solid #ff0000;
+  background-color: #ffcdd2;
+  color: #b71c1c;
+  border: 1px solid #e57373;
 }
 </style>
 """, unsafe_allow_html=True)
 
 st.set_page_config(page_title="🎲 Apuestas Deportivas", layout="wide")
-
-# --- Banner principal ---
 st.markdown(
     "<h1 style='text-align:center;'>🎲 Cuestionario Diagnóstico - Apuestas Deportivas</h1>"
-    "<h3 style='text-align:center; color:#FFA500;'>Pon a prueba tus conocimientos y gana puntos</h3>",
+    "<h3 style='text-align:center; color:#4caf50;'>Pon a prueba tus conocimientos y gana puntos</h3>",
     unsafe_allow_html=True
 )
 
 ss = st.session_state
 # Inicializar estado
 for k, v in [
-    ("nombre",""),
-    ("edad",18),
+    ("nombre", ""),
+    ("edad", 18),
     ("jugando", False),
     ("intentos", 0),
     ("mejor_nota", 0.0),
@@ -108,21 +108,22 @@ for k, v in [
 if not ss.jugando and not ss.final and ss.intentos < 3:
     with st.form("login_form", clear_on_submit=False):
         st.subheader("👤 Ingresa tus datos (≥18 años)")
-        ss.nombre = st.text_input("Nombre", ss.nombre)
-        ss.edad = st.number_input("Edad", min_value=1, max_value=120, value=ss.edad, step=1)
+        nombre = st.text_input("Nombre", ss.nombre)
+        edad   = st.number_input("Edad", min_value=1, max_value=120, value=ss.edad, step=1)
         iniciar = st.form_submit_button("🟢 Iniciar juego")
     if iniciar:
-        if ss.nombre.strip() == "":
+        if nombre.strip() == "":
             st.warning("❗ Debes ingresar tu nombre.")
-        elif ss.edad < 18:
+        elif edad < 18:
             st.error("🚫 Debes tener al menos 18 años.")
         else:
+            ss.nombre = nombre
+            ss.edad   = edad
             ss.jugando = True
             ss.show_q = True
-            ss.show_decision = False
             st.rerun()
 
-# --- Tus 20 preguntas (ejemplo con 2; extiende) ---
+# --- Tus preguntas (ejemplo con 2; extiende a 20) ---
 preguntas = [
     {"pregunta": "¿Qué es una apuesta deportiva?",
      "opciones": ["Predicción sin dinero", "Juego de azar con dinero",
@@ -161,7 +162,7 @@ if ss.jugando and ss.show_q and ss.intentos < 3:
                 ss.final = True
             st.rerun()
 
-# --- 3) Mostrar nota y decisión ---
+# --- 3) Mostrar nota y decidir ---
 if ss.show_decision:
     st.info(f"🎯 Nota del intento: **{ss.nota_actual}/10**")
     st.success(f"⭐ Mejor nota hasta ahora: **{ss.mejor_nota}/10**")
